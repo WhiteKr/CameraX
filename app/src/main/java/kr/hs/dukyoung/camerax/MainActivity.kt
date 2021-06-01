@@ -48,7 +48,39 @@ class MainActivity : AppCompatActivity() {
 		cameraExecutor = Executors.newSingleThreadExecutor()
 	}
 
-	private fun takePhoto() {}
+	private fun takePhoto() {
+		// Get a stable reference of the modifiable image capture use case
+		val imageCapture = imageCapture ?: return
+
+		// Create time-stamped output file to hold the image
+		val photoFile = File(
+			outputDirectory,
+			SimpleDateFormat(
+				FILENAME_FORMAT, Locale.US
+			).format(System.currentTimeMillis()) + ".jpg"
+		)
+
+		// Create output options object which contains file + metadata
+		val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+		// Set up image capture listener, which is triggered after photo has
+		// been taken
+		imageCapture.takePicture(
+			outputOptions,
+			ContextCompat.getMainExecutor(this),
+			object : ImageCapture.OnImageSavedCallback {
+				override fun onError(exc: ImageCaptureException) {
+					Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+				}
+
+				override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+					val savedUri = Uri.fromFile(photoFile)
+					val msg = "Photo capture succeeded: $savedUri"
+					Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+					Log.d(TAG, msg)
+				}
+			})
+	}
 
 	private fun startCamera() {
 		val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -64,6 +96,9 @@ class MainActivity : AppCompatActivity() {
 					it.setSurfaceProvider(viewFinder.surfaceProvider)
 				}
 
+			imageCapture = ImageCapture.Builder()
+				.build()
+
 			// Select back camera as a default
 			val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -73,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 
 				// Bind use cases to camera
 				cameraProvider.bindToLifecycle(
-					this, cameraSelector, preview
+					this, cameraSelector, preview, imageCapture
 				)
 
 			} catch (exc: Exception) {
