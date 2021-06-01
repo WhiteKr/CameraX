@@ -1,23 +1,23 @@
 package kr.hs.dukyoung.camerax
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import java.util.concurrent.Executors
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 typealias LumaListener = (luma: Double) -> Unit
 
