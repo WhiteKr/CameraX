@@ -77,4 +77,28 @@ class MainActivity : AppCompatActivity() {
 		private const val REQUEST_CODE_PERMISSIONS = 10
 		private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 	}
+
+	override fun onRequestPermissionsResult(
+		requestCode: Int, permissions: Array<String>, grantResults:
+		IntArray
+	) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+		// Check if the request code is correct; ignore it otherwise.
+		if (requestCode == REQUEST_CODE_PERMISSIONS) {
+			// If the permissions are granted, call startCamera().
+			if (allPermissionsGranted()) {
+				startCamera()
+			}
+			// If permissions are not granted, present a toast to notify the user that the permissions were not granted.
+			else {
+				Toast.makeText(
+					this,
+					"Permissions not granted by the user.",
+					Toast.LENGTH_SHORT
+				).show()
+				finish()
+			}
+		}
+	}
 }
