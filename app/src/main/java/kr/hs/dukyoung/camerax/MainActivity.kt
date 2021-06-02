@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 		val photoFile = File(
 			outputDirectory,
 			SimpleDateFormat(
-				FILENAME_FORMAT, Locale.US
+				FILENAME_FORMAT, Locale.KOREA
 			).format(System.currentTimeMillis()) + ".jpg"
 		)
 
