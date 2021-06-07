@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
@@ -85,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 	private fun startCamera() {
 		val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
-		cameraProviderFuture.addListener(Runnable {
+		cameraProviderFuture.addListener({
 			// Used to bind the lifecycle of cameras to the lifecycle owner
 			val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
@@ -99,6 +100,7 @@ class MainActivity : AppCompatActivity() {
 			imageCapture = ImageCapture.Builder()
 				.build()
 			val imageAnalyzer = ImageAnalysis.Builder()
+//				.setTargetResolution(Size(1280, 720)) // Setting Resolution Size of Captured Image
 				.build()
 				.also {
 					it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
